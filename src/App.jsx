@@ -123,16 +123,32 @@ function App() {
       <AnimatePresence>
         {showDock && (
           <motion.div
-            initial={{ scale: 0.1, y: 100, opacity: 0 }}
-            animate={{ scale: 1, y: 0, opacity: 1 }}
-            exit={{ scale: 0.1, y: 100, opacity: 0 }}
+            initial={{ 
+              scaleX: 0.3, 
+              scaleY: 0.8,
+              opacity: 0 
+            }}
+            animate={{ 
+              scaleX: 1, 
+              scaleY: 1,
+              opacity: 1 
+            }}
+            exit={{ 
+              scaleX: 0.3, 
+              scaleY: 0.8,
+              opacity: 0 
+            }}
             transition={{ 
               type: "spring",
-              stiffness: 300,
-              damping: 25,
-              duration: 0.5
+              stiffness: 180, // Reduced from 260
+              damping: 20,    
+              mass: 1.2,      // Added mass parameter
+              duration: 0.8   // Increased from default
             }}
-            className="dock-container"
+            className="fixed bottom-5 left-0 right-0 z-50 flex justify-center items-center"
+            style={{ 
+              transformOrigin: "center center"
+            }}
           >
             <Dock onNavigate={navigation} currentSection={currentSection} />
           </motion.div>

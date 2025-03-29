@@ -12,37 +12,35 @@ function Dock({ onNavigate, currentSection }) {
   ];
 
   return (
-    <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 z-50">
-      <div className="bg-dock-bg backdrop-blur-xl rounded-2xl px-5 py-3 border border-white/10 shadow-lg max-w-fit">
-        <div className="flex items-center justify-center gap-6">
-          {dockItems.map((item, index) => (
-            <motion.div
-              key={item.label}
-              className="relative flex flex-col items-center group"
-              whileHover={{ scale: 1.15 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={item.onClick}
-            >
-              <div className="p-2.5 rounded-full cursor-pointer hover:bg-white/10 transition-colors">
-                {item.icon}
-              </div>
-              <span className="absolute -bottom-6 opacity-0 group-hover:opacity-100 text-xs transition-opacity whitespace-nowrap bg-black/70 px-2 py-1 rounded-md">
-                {item.label}
-              </span>
-              {currentSection === index + 1 && (
-                <motion.div
-                  layoutId="activeIndicator"
-                  className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full"
-                  transition={{
-                    type: "spring",
-                    stiffness: 500,
-                    damping: 30
-                  }}
-                />
-              )}
-            </motion.div>
-          ))}
-        </div>
+    <div className="bg-dock-bg backdrop-blur-xl rounded-2xl px-5 py-3 border border-white/10 shadow-lg">
+      <div className="flex items-center justify-center gap-6">
+        {dockItems.map((item, index) => (
+          <motion.div
+            key={item.label}
+            className="relative flex flex-col items-center group"
+            whileHover={{ scale: 1.15 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={item.onClick}
+          >
+            <div className="p-2.5 rounded-full cursor-pointer hover:bg-white/10 transition-colors">
+              {item.icon}
+            </div>
+            <span className="absolute -bottom-6 opacity-0 group-hover:opacity-100 text-xs transition-opacity whitespace-nowrap bg-black/70 px-2 py-1 rounded-md">
+              {item.label}
+            </span>
+            {currentSection === index + 1 && (
+              <motion.div
+                layoutId="activeIndicator"
+                className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full"
+                transition={{
+                  type: "spring",
+                  stiffness: 500,
+                  damping: 30
+                }}
+              />
+            )}
+          </motion.div>
+        ))}
       </div>
     </div>
   );
