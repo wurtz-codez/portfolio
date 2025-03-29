@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 
 function Resume() {
   // Update to use PDF file instead of PNG
-  const resumePdfUrl = "src/assets/resume/KoustubhPande_Resume (1).pdf";
+  const resumePdfUrl = "/KoustubhPande_Resume (1).pdf";
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [pdfLoaded, setPdfLoaded] = useState(false);
 
