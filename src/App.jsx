@@ -140,10 +140,10 @@ function App() {
             }}
             transition={{ 
               type: "spring",
-              stiffness: 180, // Reduced from 260
+              stiffness: 180, 
               damping: 20,    
-              mass: 1.2,      // Added mass parameter
-              duration: 0.8   // Increased from default
+              mass: 1.2,      
+              duration: 0.8   
             }}
             className="fixed bottom-5 left-0 right-0 z-50 flex justify-center items-center"
             style={{ 
