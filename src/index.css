@@ -156,3 +156,42 @@ html {
   opacity: 0.15;
   pointer-events: none;
 }
+
+/* Text gradient animation - flows inside the letters */
+.text-gradient-animated {
+  background: linear-gradient(
+    to right,
+    #ffffff,
+    #aaaaaa,
+    #ffffff,
+    #cccccc,
+    #ffffff
+  );
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: textGradientFlow 5s linear infinite;
+}
+
+/* Text gradient animation with darker colors - flows inside the letters */
+.text-gradient-dark {
+  background: linear-gradient(
+    to right,
+    #ffffff,
+    #333333,
+    #ffffff,
+    #111111,
+    #ffffff
+  );
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: textGradientFlow 20s linear infinite; /* Changed from 5s to 8s to slow down */
+}
+
+@keyframes textGradientFlow {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}

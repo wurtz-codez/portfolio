@@ -6,6 +6,10 @@ import { SiTailwindcss, SiMongodb, SiPostgresql, SiRedux, SiNextdotjs, SiTypescr
 function Skills() {
   const [activeCategory, setActiveCategory] = useState('all');
   
+  // Split the title into individual letters for hover effect
+  const title = "Skills";
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+  
   const categories = [
     { id: 'all', name: 'All Skills' },
     { id: 'frontend', name: 'Frontend' },
@@ -57,13 +61,33 @@ function Skills() {
       className="min-h-screen p-8"
     >
       <div className="max-w-6xl mx-auto">
-        <motion.h1
-          initial={{ y: 20 }}
-          animate={{ y: 0 }}
-          className="text-4xl font-bold mb-12 text-center"
-        >
-          Skills
-        </motion.h1>
+        <div className="relative mb-12 flex justify-center">
+          <motion.h1
+            initial={{ y: -50 }}
+            animate={{ y: 0 }}
+            className="text-5xl font-bold text-center py-3 px-10 relative z-10 cursor-pointer"
+          >
+            {title.split('').map((letter, index) => (
+              <motion.span
+                key={index}
+                className="inline-block"
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                animate={{
+                  scale: hoveredIndex === index ? 1.4 : 1,
+                  y: hoveredIndex === index ? -5 : 0
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 500,
+                  damping: 20
+                }}
+              >
+                {letter}
+              </motion.span>
+            ))}
+          </motion.h1>
+        </div>
 
         {/* Category Filter */}
         <div className="flex flex-wrap justify-center gap-3 mb-10">

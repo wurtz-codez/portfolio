@@ -6,6 +6,10 @@ function Contact() {
   const [formStatus, setFormStatus] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
+  // Split the title into individual letters for hover effect
+  const title = "Contact Me";
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -51,13 +55,33 @@ function Contact() {
       className="min-h-screen p-8"
     >
       <div className="max-w-4xl mx-auto">
-        <motion.h1
-          initial={{ y: 20 }}
-          animate={{ y: 0 }}
-          className="text-4xl font-bold mb-12 text-center"
-        >
-          Contact Me
-        </motion.h1>
+        <div className="relative mb-12 flex justify-center">
+          <motion.h1
+            initial={{ y: -50 }}
+            animate={{ y: 0 }}
+            className="text-5xl font-bold text-center py-3 px-10 relative z-10 cursor-pointer"
+          >
+            {title.split('').map((letter, index) => (
+              <motion.span
+                key={index}
+                className="inline-block"
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                animate={{
+                  scale: hoveredIndex === index ? 1.4 : 1,
+                  y: hoveredIndex === index ? -5 : 0
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 500,
+                  damping: 20
+                }}
+              >
+                {letter}
+              </motion.span>
+            ))}
+          </motion.h1>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Contact Form */}
