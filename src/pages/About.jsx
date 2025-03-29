@@ -1,10 +1,25 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function About() {
   // Split the title into individual letters for hover effect
   const title = "About Me";
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  
+  // State for the animated dots
+  const [dots, setDots] = useState("");
+  
+  // Effect to animate the dots
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDots(prevDots => {
+        if (prevDots.length >= 4) return "";
+        return prevDots + ".";
+      });
+    }, 500); // Change dot every 500ms
+    
+    return () => clearInterval(interval);
+  }, []);
   
   return (
     <motion.div
@@ -48,7 +63,9 @@ function About() {
             animate={{ opacity: 1, x: 0 }}
             className="backdrop-blur-xl bg-white/10 rounded-2xl p-8 border border-white/20 shadow-xl"
           >
-            <h2 className="text-2xl font-bold mb-6">Ayo, that's me...</h2>
+            <h2 className="text-2xl font-bold mb-6">
+              Ayo, that's me<span className="inline-block w-[3ch]">{dots}</span>
+            </h2>
             <div className="space-y-4 text-gray-300">
               <p>
                 A passionate Full Stack Developer with a keen interest in creating
