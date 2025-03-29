@@ -9,16 +9,25 @@ function Home() {
 
   useEffect(() => {
     if (charIndex < text.length) {
+      // Check if we're at the end of a word (space character or last character)
+      const isEndOfWord = 
+        charIndex === text.length - 1 || 
+        text[charIndex] === ' ' || 
+        (charIndex > 0 && text[charIndex - 1] === ' ');
+      
+      // Use different delays based on whether we're at the end of a word
+      const delay = isEndOfWord ? 100 : 50; 
+
       const timeout = setTimeout(() => {
         setDisplayedText((prev) => prev + text[charIndex]);
         setCharIndex((prev) => prev + 1);
-      }, 100); // Slower speed for typing effect
+      }, delay);
 
       return () => clearTimeout(timeout);
     } else {
       setTimeout(() => setShowCursor(false), 500); // Remove cursor after typing finishes
     }
-  }, [charIndex]);
+  }, [charIndex, text]);
 
   return (
     <motion.div
