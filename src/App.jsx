@@ -7,30 +7,21 @@ import Skills from './pages/Skills';
 import Projects from './pages/Projects';
 import Resume from './pages/Resume';
 import Contact from './pages/Contact';
+import GradientBackground from './components/GradientBackground';
 
 function App() {
   const [currentSection, setCurrentSection] = useState(1);
   const [showDock, setShowDock] = useState(false);
   const [showScrollPrompt, setShowScrollPrompt] = useState(true);
-  const [typedText, setTypedText] = useState('');
-  const fullText = "Hello, I'm Koustubh";
-  const typingSpeed = 100; // ms per character
-  const homeRef = useRef(null);
-
-  // Typing animation effect
-  useEffect(() => {
-    let currentIndex = 0;
-    const interval = setInterval(() => {
-      if (currentIndex < fullText.length) {
-        setTypedText(prev => prev + fullText[currentIndex]);
-        currentIndex++;
-      } else {
-        clearInterval(interval);
-      }
-    }, typingSpeed);
-
-    return () => clearInterval(interval);
-  }, []);
+  
+  const sectionRefs = {
+    home: useRef(null),
+    about: useRef(null),
+    skills: useRef(null),
+    projects: useRef(null),
+    resume: useRef(null),
+    contact: useRef(null)
+  };
 
   // Handle scroll events with smooth dock appearance
   useEffect(() => {
@@ -53,10 +44,23 @@ function App() {
   // Update current section based on scroll position
   useEffect(() => {
     const handleScroll = () => {
-      const sections = document.querySelectorAll('section');
       const scrollPosition = window.scrollY + window.innerHeight / 3;
       
-      sections.forEach((section, index) => {
+      // Get all section elements
+      const sections = [
+        sectionRefs.home.current,
+        sectionRefs.about.current,
+        sectionRefs.skills.current,
+        sectionRefs.projects.current,
+        sectionRefs.resume.current,
+        sectionRefs.contact.current
+      ];
+      
+      // Filter out null refs
+      const validSections = sections.filter(section => section);
+      
+      // Determine which section is currently in view
+      validSections.forEach((section, index) => {
         const sectionTop = section.offsetTop;
         const sectionHeight = section.offsetHeight;
         
@@ -68,53 +72,50 @@ function App() {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [sectionRefs]);
 
-  const scrollToSection = (section) => {
-    const sections = document.querySelectorAll('section');
-    sections[section - 1]?.scrollIntoView({ behavior: 'smooth' });
-    setCurrentSection(section);
+  const scrollToSection = (sectionName) => {
+    const sectionRef = sectionRefs[sectionName];
+    if (sectionRef && sectionRef.current) {
+      sectionRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const navigation = {
-    home: () => scrollToSection(1),
-    about: () => scrollToSection(2),
-    skills: () => scrollToSection(3),
-    projects: () => scrollToSection(4),
-    resume: () => scrollToSection(5),
-    contact: () => scrollToSection(6),
+    home: () => scrollToSection('home'),
+    about: () => scrollToSection('about'),
+    skills: () => scrollToSection('skills'),
+    projects: () => scrollToSection('projects'),
+    resume: () => scrollToSection('resume'),
+    contact: () => scrollToSection('contact'),
   };
 
   return (
     <div className="relative min-h-screen bg-black text-white">
       <main className="relative z-10">
-        <section ref={homeRef} className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <motion.h1 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-6xl font-bold mb-8"
-            >
-              {typedText}
-            </motion.h1>
-            {showScrollPrompt && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 2 }}
-                className="text-xl text-gray-400"
-              >
-                Scroll down to explore
-              </motion.div>
-            )}
-          </div>
+        <section id="home" ref={sectionRefs.home}>
+          <Home />
         </section>
-
-        <About />
-        <Skills />
-        <Projects />
-        <Resume />
-        <Contact />
+        
+        <section id="about" ref={sectionRefs.about}>
+          <About />
+        </section>
+        
+        <section id="skills" ref={sectionRefs.skills}>
+          <Skills />
+        </section>
+        
+        <section id="projects" ref={sectionRefs.projects}>
+          <Projects />
+        </section>
+        
+        <section id="resume" ref={sectionRefs.resume}>
+          <Resume />
+        </section>
+        
+        <section id="contact" ref={sectionRefs.contact}>
+          <Contact />
+        </section>
       </main>
 
       <AnimatePresence>
@@ -135,6 +136,24 @@ function App() {
           </motion.div>
         )}
       </AnimatePresence>
+      
+      {showScrollPrompt && (
+        <motion.div 
+          className="fixed bottom-8 left-1/2 transform -translate-x-1/2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <div className="text-white/50 text-sm">Scroll to explore</div>
+          <div className="w-6 h-10 border-2 border-white/30 rounded-full mx-auto mt-2 flex justify-center">
+            <motion.div 
+              className="w-1.5 h-1.5 bg-white/60 rounded-full mt-2"
+              animate={{ y: [0, 15, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            />
+          </div>
+        </motion.div>
+      )}
     </div>
   );
 }

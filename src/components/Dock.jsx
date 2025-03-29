@@ -3,34 +3,36 @@ import { FaHome, FaUser, FaCode, FaProjectDiagram, FaFileAlt, FaEnvelope } from 
 
 function Dock({ onNavigate, currentSection }) {
   const dockItems = [
-    { icon: <FaHome size={24} />, label: 'Home', onClick: onNavigate.home },
-    { icon: <FaUser size={24} />, label: 'About', onClick: onNavigate.about },
-    { icon: <FaCode size={24} />, label: 'Skills', onClick: onNavigate.skills },
-    { icon: <FaProjectDiagram size={24} />, label: 'Projects', onClick: onNavigate.projects },
-    { icon: <FaFileAlt size={24} />, label: 'Resume', onClick: onNavigate.resume },
-    { icon: <FaEnvelope size={24} />, label: 'Contact', onClick: onNavigate.contact },
+    { icon: <FaHome size={20} />, label: 'Home', onClick: onNavigate.home },
+    { icon: <FaUser size={20} />, label: 'About', onClick: onNavigate.about },
+    { icon: <FaCode size={20} />, label: 'Skills', onClick: onNavigate.skills },
+    { icon: <FaProjectDiagram size={20} />, label: 'Projects', onClick: onNavigate.projects },
+    { icon: <FaFileAlt size={20} />, label: 'Resume', onClick: onNavigate.resume },
+    { icon: <FaEnvelope size={20} />, label: 'Contact', onClick: onNavigate.contact },
   ];
 
   return (
-    <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50">
-      <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-3 border border-white/20 shadow-xl min-w-[600px]">
-        <div className="flex items-center justify-between">
+    <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 z-50">
+      <div className="bg-dock-bg backdrop-blur-xl rounded-2xl px-4 py-2 border border-white/10 shadow-lg max-w-fit">
+        <div className="flex items-center justify-center gap-5">
           {dockItems.map((item, index) => (
             <motion.div
               key={item.label}
-              className="relative flex flex-col items-center"
-              whileHover={{ scale: 1.2 }}
+              className="relative flex flex-col items-center group"
+              whileHover={{ scale: 1.15 }}
               whileTap={{ scale: 0.95 }}
               onClick={item.onClick}
             >
-              <div className="p-3 rounded-xl cursor-pointer hover:bg-white/10 transition-colors">
+              <div className="p-2 rounded-full cursor-pointer hover:bg-white/10 transition-colors">
                 {item.icon}
               </div>
-              <span className="text-xs mt-1 text-gray-300">{item.label}</span>
+              <span className="absolute -bottom-6 opacity-0 group-hover:opacity-100 text-xs transition-opacity whitespace-nowrap bg-black/70 px-2 py-1 rounded-md">
+                {item.label}
+              </span>
               {currentSection === index + 1 && (
                 <motion.div
                   layoutId="activeIndicator"
-                  className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-white rounded-full"
+                  className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full"
                   transition={{
                     type: "spring",
                     stiffness: 500,

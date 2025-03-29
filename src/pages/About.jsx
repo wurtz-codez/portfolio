@@ -23,10 +23,10 @@ function About() {
             animate={{ opacity: 1, x: 0 }}
             className="backdrop-blur-xl bg-white/10 rounded-2xl p-8 border border-white/20 shadow-xl"
           >
-            <h2 className="text-2xl font-bold mb-6">My Story</h2>
+            <h2 className="text-2xl font-bold mb-6">Ayo, that's me...</h2>
             <div className="space-y-4 text-gray-300">
               <p>
-                I'm a passionate Full Stack Developer with a keen interest in creating
+                A passionate Full Stack Developer with a keen interest in creating
                 beautiful and functional web applications. My journey in software
                 development began with a curiosity about how things work on the
                 internet, which led me to explore various technologies and frameworks.
@@ -38,7 +38,7 @@ function About() {
               </p>
               <p>
                 When I'm not coding, you can find me exploring new technologies,
-                contributing to open-source projects, or sharing my knowledge through
+                participating in hackathons, or sharing my knowledge through
                 technical writing.
               </p>
             </div>
@@ -58,27 +58,27 @@ function About() {
                 className="w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white/20"
               >
                 <img
-                  src="/your-photo.jpg"
+                  src="src/assets/logos/profile_ghibli.jpg"
                   alt="Profile"
                   className="w-full h-full object-cover"
                 />
               </motion.div>
               <h2 className="text-2xl font-bold mb-2">Koustubh Pande</h2>
-              <p className="text-gray-400">Full Stack Developer</p>
+              <p className="text-gray-400">Developer | Designer</p>
             </div>
 
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
                 <span className="text-blue-400">📍</span>
-                <span>Location</span>
+                <span>Indore (M.P.), India</span>
               </div>
               <div className="flex items-center space-x-3">
                 <span className="text-green-400">💼</span>
-                <span>Experience</span>
+                <span>Sophomore, Free Lancer</span>
               </div>
               <div className="flex items-center space-x-3">
                 <span className="text-purple-400">🎓</span>
-                <span>Education</span>
+                <span>Vellore Institute of Technology</span>
               </div>
             </div>
           </motion.div>
