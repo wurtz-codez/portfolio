@@ -1,13 +1,44 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function Resume() {
-  // Example resume image URL - replace with actual resume image later
-  const resumeImageUrl = "https://www.resumebuilder.com/wp-content/uploads/2020/02/Professional-Resume-Template-1-1.png";
-  
+  // Update to use PDF file instead of PNG
+  const resumePdfUrl = "src/assets/resume/KoustubhPande_Resume (1).pdf";
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [pdfLoaded, setPdfLoaded] = useState(false);
+
+  // Add a loading state for the PDF
+  useEffect(() => {
+    // Check if the PDF exists and is accessible
+    const checkPdf = async () => {
+      try {
+        const response = await fetch(resumePdfUrl);
+        if (response.ok) {
+          setPdfLoaded(true);
+        }
+      } catch (error) {
+        console.error("Error loading PDF:", error);
+      }
+    };
+    
+    checkPdf();
+  }, [resumePdfUrl]);
+
+  // Handle resume download
+  const handleDownload = () => {
+    // Create an anchor element and set properties for download
+    const link = document.createElement('a');
+    link.href = resumePdfUrl;
+    link.download = "KoustubhPande_Resume.pdf";
+    
+    // Append to body, click programmatically, then remove
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   // Split the title into individual letters for hover effect
   const title = "Resume";
-  const [hoveredIndex, setHoveredIndex] = useState(null);
 
   return (
     <motion.div
@@ -53,23 +84,37 @@ function Resume() {
         >
           <motion.div
             whileHover={{ scale: 1.02 }}
-            className="mb-8 overflow-hidden rounded-lg"
+            className="mb-8 overflow-hidden rounded-lg bg-white"
+            style={{ height: "70vh" }}
           >
-            <img
-              src={resumeImageUrl}
-              alt="Resume Preview"
-              className="w-full object-contain bg-white"
-            />
+            {pdfLoaded ? (
+              <object
+                data={resumePdfUrl}
+                type="application/pdf"
+                width="100%"
+                height="100%"
+                className="w-full h-full"
+              >
+                <p className="p-4 text-black text-center">
+                  Your browser doesn't support PDF embedding. You can 
+                  <a href={resumePdfUrl} className="text-blue-600 underline mx-1">
+                    download the PDF
+                  </a>
+                  instead.
+                </p>
+              </object>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <p className="text-gray-800">Loading resume...</p>
+              </div>
+            )}
           </motion.div>
           <div className="text-center">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="bg-hover-bg px-8 py-4 rounded-lg text-lg font-semibold hover:bg-opacity-80 transition-colors shadow-lg"
-              onClick={() => {
-                // Add resume download logic here
-                alert('Resume download functionality will be added once you provide the resume file.');
-              }}
+              onClick={handleDownload}
             >
               Download Resume
             </motion.button>
