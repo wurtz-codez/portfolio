@@ -21,19 +21,19 @@ function Contact() {
     {
       icon: <FaGithub size={24} />,
       text: 'GitHub',
-      url: 'https://github.com/yourusername',
+      url: 'https://github.com/wurtz-codez',
       color: 'hover:text-gray-300'
     },
     {
       icon: <FaLinkedin size={24} />,
       text: 'LinkedIn',
-      url: 'https://linkedin.com/in/yourusername',
+      url: 'https://linkedin.com/in/koustubh-pande',
       color: 'hover:text-blue-400'
     },
     {
       icon: <FaDiscord size={24} />,
       text: 'Discord',
-      url: 'https://discord.gg/yourusername',
+      url: 'https://discord.gg/koustubhpande',
       color: 'hover:text-indigo-400'
     },
     {
