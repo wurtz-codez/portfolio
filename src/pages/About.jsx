@@ -100,7 +100,7 @@ function About() {
                 className="w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white/20"
               >
                 <img
-                  src="src/assets/logos/profile_ghibli.jpg"
+                  src="/profile_ghibli.jpg"
                   alt="Profile"
                   className="w-full h-full object-cover"
                 />
