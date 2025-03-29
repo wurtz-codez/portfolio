@@ -141,7 +141,7 @@ function App() {
       
       {showScrollPrompt && (
         <motion.div 
-          className="fixed bottom-8 left-1/2 transform -translate-x-1/2"
+          className="fixed bottom-8 left-0 right-0 mx-auto w-max text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}

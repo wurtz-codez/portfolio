@@ -80,7 +80,7 @@ function About() {
               </p>
               <p>
                 When I'm not coding, you can find me exploring new technologies,
-                participating in hackathons, or sharing my knowledge through
+                participating in hackathons or sharing my knowledge through
                 technical writing.
               </p>
             </div>

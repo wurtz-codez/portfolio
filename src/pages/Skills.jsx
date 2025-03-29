@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaReact, FaNodeJs, FaPython, FaJava, FaHtml5, FaCss3Alt, FaJs, FaGitAlt, FaDocker, FaAws } from 'react-icons/fa';
-import { SiTailwindcss, SiMongodb, SiPostgresql, SiRedux, SiNextdotjs, SiTypescript, SiFirebase, SiJest, SiWebpack } from 'react-icons/si';
+import { FaReact, FaNodeJs, FaPython, FaJava, FaHtml5, FaCss3Alt, FaJs, FaGitAlt, FaDocker, FaAws, FaGithub, FaFigma } from 'react-icons/fa';
+import { SiTailwindcss, SiMongodb, SiPostgresql, SiRedux, SiNextdotjs, SiTypescript, SiFirebase, SiJest, SiWebpack, SiCplusplus, SiPostman, SiJupyter, SiFramer } from 'react-icons/si';
+import { VscCode } from 'react-icons/vsc';
 
 function Skills() {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -12,42 +13,50 @@ function Skills() {
   
   const categories = [
     { id: 'all', name: 'All Skills' },
+    { id: 'languages', name: 'Languages' },
     { id: 'frontend', name: 'Frontend' },
     { id: 'backend', name: 'Backend' },
     { id: 'database', name: 'Database' },
     { id: 'tools', name: 'Tools' },
-    { id: 'cloud', name: 'Cloud' }
+    { id: 'design', name: 'Design' },
   ];
 
   const skillsData = [
+    // Languages
+    { icon: <FaJs size={40} color="#F7DF1E" />, name: 'JavaScript', category: 'languages' },
+    { icon: <SiTypescript size={40} color="#3178C6" />, name: 'TypeScript', category: 'languages' },
+    { icon: <FaPython size={40} color="#3776AB" />, name: 'Python', category: 'languages' },
+    { icon: <FaJava size={40} color="#007396" />, name: 'Java', category: 'languages' },
+    { icon: <SiCplusplus size={40} color="#00599C" />, name: 'C++', category: 'languages' },
+    
     // Frontend
     { icon: <FaReact size={40} color="#61DAFB" />, name: 'React', category: 'frontend' },
     { icon: <SiRedux size={40} color="#764ABC" />, name: 'Redux', category: 'frontend' },
     { icon: <FaHtml5 size={40} color="#E34F26" />, name: 'HTML5', category: 'frontend' },
     { icon: <FaCss3Alt size={40} color="#1572B6" />, name: 'CSS3', category: 'frontend' },
-    { icon: <FaJs size={40} color="#F7DF1E" />, name: 'JavaScript', category: 'frontend' },
-    { icon: <SiTypescript size={40} color="#3178C6" />, name: 'TypeScript', category: 'frontend' },
+    // { icon: <FaJs size={40} color="#F7DF1E" />, name: 'JavaScript', category: 'frontend' },
+    // { icon: <SiTypescript size={40} color="#3178C6" />, name: 'TypeScript', category: 'frontend' },
     { icon: <SiTailwindcss size={40} color="#06B6D4" />, name: 'Tailwind CSS', category: 'frontend' },
-    { icon: <SiNextdotjs size={40} color="#000000" />, name: 'Next.js', category: 'frontend' },
     
     // Backend
     { icon: <FaNodeJs size={40} color="#339933" />, name: 'Node.js', category: 'backend' },
-    { icon: <FaPython size={40} color="#3776AB" />, name: 'Python', category: 'backend' },
+    // { icon: <FaPython size={40} color="#3776AB" />, name: 'Python', category: 'backend' },
     { icon: <FaJava size={40} color="#007396" />, name: 'Java', category: 'backend' },
     
     // Database
     { icon: <SiMongodb size={40} color="#47A248" />, name: 'MongoDB', category: 'database' },
-    { icon: <SiPostgresql size={40} color="#4169E1" />, name: 'PostgreSQL', category: 'database' },
     { icon: <SiFirebase size={40} color="#FFCA28" />, name: 'Firebase', category: 'database' },
     
     // Tools
     { icon: <FaGitAlt size={40} color="#F05032" />, name: 'Git', category: 'tools' },
-    { icon: <FaDocker size={40} color="#2496ED" />, name: 'Docker', category: 'tools' },
-    { icon: <SiWebpack size={40} color="#8DD6F9" />, name: 'Webpack', category: 'tools' },
-    { icon: <SiJest size={40} color="#C21325" />, name: 'Jest', category: 'tools' },
+    { icon: <FaGithub size={40} color="#181717" />, name: 'GitHub', category: 'tools' },
+    { icon: <SiPostman size={40} color="#FF6C37" />, name: 'Postman', category: 'tools' },
+    { icon: <VscCode size={40} color="#007ACC" />, name: 'VS Code', category: 'tools' },
+    { icon: <SiJupyter size={40} color="#F37626" />, name: 'Jupyter Notebook', category: 'tools' },
     
-    // Cloud
-    { icon: <FaAws size={40} color="#FF9900" />, name: 'AWS', category: 'cloud' }
+    // Design
+    { icon: <FaFigma size={40} color="#F24E1E" />, name: 'Figma', category: 'design' },
+    { icon: <SiFramer size={40} color="#0055FF" />, name: 'Framer', category: 'design' },
   ];
 
   const filteredSkills = activeCategory === 'all' 
