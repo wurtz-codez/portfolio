@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 function Projects() {
@@ -8,6 +8,15 @@ function Projects() {
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0); // -1 for left, 1 for right, 0 for initial
+
+  // Add state to track touch/drag events
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [currentX, setCurrentX] = useState(0);
+  const containerRef = useRef(null);
+
+  // Minimum distance to trigger a swipe (in pixels)
+  const SWIPE_THRESHOLD = 50;
 
   // Memoize the projects data to prevent unnecessary re-renders
   const projects = useMemo(() => [
@@ -63,6 +72,94 @@ function Projects() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [nextProject, prevProject]);
+
+  // Handle touch/mouse start
+  const handleDragStart = useCallback((clientX) => {
+    setIsDragging(true);
+    setStartX(clientX);
+    setCurrentX(clientX);
+  }, []);
+
+  // Handle touch/mouse move
+  const handleDragMove = useCallback((clientX) => {
+    if (!isDragging) return;
+    setCurrentX(clientX);
+  }, [isDragging]);
+
+  // Handle touch/mouse end
+  const handleDragEnd = useCallback(() => {
+    if (!isDragging) return;
+
+    const diff = currentX - startX;
+
+    // Check if swipe distance exceeds threshold
+    if (Math.abs(diff) > SWIPE_THRESHOLD) {
+      if (diff > 0) {
+        // Swiped right, go to previous
+        prevProject();
+      } else {
+        // Swiped left, go to next
+        nextProject();
+      }
+    }
+
+    setIsDragging(false);
+  }, [isDragging, currentX, startX, prevProject, nextProject]);
+
+  // Handle wheel events for trackpad scrolling
+  const handleWheel = useCallback((e) => {
+    // Debounce wheel events to prevent rapid scrolling
+    if (e.deltaX > 70) {
+      nextProject();
+    } else if (e.deltaX < -70) {
+      prevProject();
+    }
+  }, [nextProject, prevProject]);
+
+  // Set up event listeners for wheel, touch, and mouse events
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    // Trackpad/mouse wheel events
+    const wheelHandler = (e) => {
+      // Only handle horizontal scrolling
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+        e.preventDefault();
+        handleWheel(e);
+      }
+    };
+
+    // Touch events
+    const touchStartHandler = (e) => handleDragStart(e.touches[0].clientX);
+    const touchMoveHandler = (e) => handleDragMove(e.touches[0].clientX);
+    const touchEndHandler = () => handleDragEnd();
+
+    // Mouse events
+    const mouseDownHandler = (e) => handleDragStart(e.clientX);
+    const mouseMoveHandler = (e) => handleDragMove(e.clientX);
+    const mouseUpHandler = () => handleDragEnd();
+
+    // Add event listeners
+    container.addEventListener('wheel', wheelHandler, { passive: false });
+    container.addEventListener('touchstart', touchStartHandler);
+    container.addEventListener('touchmove', touchMoveHandler);
+    container.addEventListener('touchend', touchEndHandler);
+    container.addEventListener('mousedown', mouseDownHandler);
+    window.addEventListener('mousemove', mouseMoveHandler);
+    window.addEventListener('mouseup', mouseUpHandler);
+
+    // Clean up
+    return () => {
+      container.removeEventListener('wheel', wheelHandler);
+      container.removeEventListener('touchstart', touchStartHandler);
+      container.removeEventListener('touchmove', touchMoveHandler);
+      container.removeEventListener('touchend', touchEndHandler);
+      container.removeEventListener('mousedown', mouseDownHandler);
+      window.removeEventListener('mousemove', mouseMoveHandler);
+      window.removeEventListener('mouseup', mouseUpHandler);
+    };
+  }, [handleDragStart, handleDragMove, handleDragEnd, handleWheel]);
 
   // Optimize the carousel item style calculation with memoization
   const getCarouselItemStyles = useCallback((index) => {
@@ -174,8 +271,15 @@ function Projects() {
         </div>
 
         {/* Optimized 3D Circular Carousel */}
-        <div className="relative h-[600px] w-full overflow-hidden" 
-             style={{ perspective: '1200px', willChange: 'transform' }}>
+        <div 
+          ref={containerRef}
+          className="relative h-[600px] w-full overflow-hidden touch-pan-x" 
+          style={{ 
+            perspective: '1200px', 
+            willChange: 'transform',
+            cursor: isDragging ? 'grabbing' : 'grab',
+          }}
+        >
           {/* Navigation arrows - always show both arrows */}
           <button 
             onClick={prevProject}
@@ -194,8 +298,14 @@ function Projects() {
           </button>
 
           {/* Project cards with performance optimizations */}
-          <div className="w-full h-full flex items-center justify-center" 
-               style={{ transformStyle: 'preserve-3d', transformOrigin: 'center center', willChange: 'transform' }}>
+          <div 
+            className="w-full h-full flex items-center justify-center" 
+            style={{ 
+              transformStyle: 'preserve-3d', 
+              transformOrigin: 'center center', 
+              willChange: 'transform',
+            }}
+          >
             {projects.map((project, index) => {
               // Skip rendering completely hidden items
               if (itemStyles[index].visibility === 'hidden') {
@@ -205,14 +315,16 @@ function Projects() {
               return (
                 <div
                   key={index}
-                  className="absolute bg-dock-bg rounded-xl overflow-hidden backdrop-blur-lg w-[350px] max-w-full cursor-pointer"
+                  className="absolute bg-dock-bg rounded-xl overflow-hidden backdrop-blur-lg w-[350px] max-w-full"
                   style={{ 
                     ...itemStyles[index],
                     transformStyle: 'preserve-3d',
-                    transition: 'all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1)',
+                    transition: isDragging ? 'none' : 'all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1)',
                     willChange: 'transform, opacity',
+                    pointerEvents: isDragging ? 'none' : 'auto',
+                    cursor: isDragging ? 'grabbing' : 'pointer',
                   }}
-                  onClick={() => handleProjectClick(index)}
+                  onClick={() => !isDragging && handleProjectClick(index)}
                 >
                   <div 
                     className="h-48 bg-gray-800 bg-cover bg-center" 
@@ -267,6 +379,26 @@ function Projects() {
               );
             })}
           </div>
+
+          {/* Visual indicator for swipe direction on mobile */}
+          {isDragging && (
+            <div 
+              className="absolute inset-0 pointer-events-none flex items-center justify-center"
+              style={{ 
+                opacity: Math.min(1, Math.abs(currentX - startX) / 100) * 0.5 
+              }}
+            >
+              <div 
+                className="text-white text-6xl" 
+                style={{ 
+                  transform: `translateX(${(currentX - startX) / 3}px)`,
+                  opacity: Math.min(0.8, Math.abs(currentX - startX) / 200)
+                }}
+              >
+                {currentX - startX > 0 ? <FaChevronLeft /> : <FaChevronRight />}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Optimized pagination indicators */}
