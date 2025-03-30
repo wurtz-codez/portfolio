@@ -108,12 +108,32 @@ function Projects() {
 
   // Handle wheel events for trackpad scrolling
   const handleWheel = useCallback((e) => {
-    // Debounce wheel events to prevent rapid scrolling
-    if (e.deltaX > 70) {
-      nextProject();
-    } else if (e.deltaX < -70) {
-      prevProject();
+    // Only prevent default and handle carousel navigation for horizontal scrolls
+    // or when vertical scroll is significant and we're not scrolling the page
+    const isHorizontalScroll = Math.abs(e.deltaX) > Math.abs(e.deltaY);
+    
+    if (isHorizontalScroll) {
+      // Handle horizontal scrolling for carousel
+      if (e.deltaX > 70) {
+        nextProject();
+      } else if (e.deltaX < -70) {
+        prevProject();
+      }
+      return true; // Handled horizontal scroll
+    } else {
+      // For vertical scrolls, only handle if they're intentional carousel interactions
+      // Use a higher threshold for vertical to avoid interfering with normal page scrolling
+      if (e.deltaY > 100) {
+        nextProject();
+        return true;
+      } else if (e.deltaY < -100) {
+        prevProject();
+        return true;
+      }
     }
+    
+    // Return false if we didn't handle the scroll
+    return false;
   }, [nextProject, prevProject]);
 
   // Set up event listeners for wheel, touch, and mouse events
@@ -123,10 +143,10 @@ function Projects() {
 
     // Trackpad/mouse wheel events
     const wheelHandler = (e) => {
-      // Only handle horizontal scrolling
-      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+      // Only prevent default if our handler actually used the scroll event
+      // This allows normal page scrolling when the user is just scrolling the page
+      if (handleWheel(e)) {
         e.preventDefault();
-        handleWheel(e);
       }
     };
 
@@ -271,134 +291,137 @@ function Projects() {
         </div>
 
         {/* Optimized 3D Circular Carousel */}
-        <div 
-          ref={containerRef}
-          className="relative h-[600px] w-full overflow-hidden touch-pan-x" 
-          style={{ 
-            perspective: '1200px', 
-            willChange: 'transform',
-            cursor: isDragging ? 'grabbing' : 'grab',
-          }}
-        >
-          {/* Navigation arrows - always show both arrows */}
+        <div className="flex items-center justify-center w-full relative">
+          {/* Navigation button - left side */}
           <button 
             onClick={prevProject}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 z-50 bg-dock-bg p-3 rounded-full hover:bg-hover-bg transition-colors"
+            className="absolute left-0 md:left-2 top-1/2 transform -translate-y-1/2 h-10 w-10 md:h-12 md:w-12 bg-dock-bg rounded-full hover:bg-hover-bg transition-colors flex items-center justify-center z-20"
             aria-label="Previous project"
           >
-            <FaChevronLeft size={24} />
+            <FaChevronLeft size={18} />
           </button>
-
-          <button 
-            onClick={nextProject}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 z-50 bg-dock-bg p-3 rounded-full hover:bg-hover-bg transition-colors"
-            aria-label="Next project"
-          >
-            <FaChevronRight size={24} />
-          </button>
-
-          {/* Project cards with performance optimizations */}
+          
           <div 
-            className="w-full h-full flex items-center justify-center" 
+            ref={containerRef}
+            className="relative h-[500px] sm:h-[600px] w-full max-w-[85%] sm:max-w-[90%] mx-auto overflow-hidden touch-pan-x" 
             style={{ 
-              transformStyle: 'preserve-3d', 
-              transformOrigin: 'center center', 
+              perspective: '1200px', 
               willChange: 'transform',
+              cursor: isDragging ? 'grabbing' : 'grab',
             }}
           >
-            {projects.map((project, index) => {
-              // Skip rendering completely hidden items
-              if (itemStyles[index].visibility === 'hidden') {
-                return null;
-              }
-
-              return (
-                <div
-                  key={index}
-                  className="absolute bg-dock-bg rounded-xl overflow-hidden backdrop-blur-lg w-[350px] max-w-full"
-                  style={{ 
-                    ...itemStyles[index],
-                    transformStyle: 'preserve-3d',
-                    transition: isDragging ? 'none' : 'all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1)',
-                    willChange: 'transform, opacity',
-                    pointerEvents: isDragging ? 'none' : 'auto',
-                    cursor: isDragging ? 'grabbing' : 'pointer',
-                  }}
-                  onClick={() => !isDragging && handleProjectClick(index)}
-                >
-                  <div 
-                    className="h-48 bg-gray-800 bg-cover bg-center" 
-                    style={{ 
-                      backgroundImage: `url(${project.image})`,
-                      backgroundColor: '#1a1a1a'
-                    }}
-                  ></div>
-                  <div className="p-4">
-                    <h3 className="text-lg font-bold mb-2">{project.title}</h3>
-                    <p className="text-gray-300 mb-4 text-sm">
-                      {project.description}
-                    </p>
-
-                    {/* Technology tags */}
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {project.technologies && project.technologies.map((tech, i) => (
-                        <span 
-                          key={i} 
-                          className="text-xs bg-white/10 px-2 py-1 rounded-full"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-
-                    <div className="flex gap-3">
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-block bg-hover-bg px-4 py-2 rounded-lg text-sm hover:bg-opacity-80 transition-colors"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        View on GitHub
-                      </a>
-
-                      {project.demoLink && (
-                        <a
-                          href={project.demoLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-block bg-blue-500/30 px-4 py-2 rounded-lg text-sm hover:bg-opacity-50 transition-colors"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          Live Demo
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Visual indicator for swipe direction on mobile */}
-          {isDragging && (
+            {/* Project cards with performance optimizations */}
             <div 
-              className="absolute inset-0 pointer-events-none flex items-center justify-center"
+              className="w-full h-full flex items-center justify-center" 
               style={{ 
-                opacity: Math.min(1, Math.abs(currentX - startX) / 100) * 0.5 
+                transformStyle: 'preserve-3d', 
+                transformOrigin: 'center center', 
+                willChange: 'transform',
               }}
             >
+              {projects.map((project, index) => {
+                // Skip rendering completely hidden items
+                if (itemStyles[index].visibility === 'hidden') {
+                  return null;
+                }
+
+                return (
+                  <div
+                    key={index}
+                    className="absolute bg-dock-bg rounded-xl overflow-hidden backdrop-blur-lg w-[300px] sm:w-[350px] max-w-[85%] sm:max-w-full"
+                    style={{ 
+                      ...itemStyles[index],
+                      transformStyle: 'preserve-3d',
+                      transition: isDragging ? 'none' : 'all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1)',
+                      willChange: 'transform, opacity',
+                      pointerEvents: isDragging ? 'none' : 'auto',
+                      cursor: isDragging ? 'grabbing' : 'pointer',
+                    }}
+                    onClick={() => !isDragging && handleProjectClick(index)}
+                  >
+                    <div 
+                      className="h-36 sm:h-48 bg-gray-800 bg-cover bg-center" 
+                      style={{ 
+                        backgroundImage: `url(${project.image})`,
+                        backgroundColor: '#1a1a1a'
+                      }}
+                    ></div>
+                    <div className="p-4">
+                      <h3 className="text-lg font-bold mb-2">{project.title}</h3>
+                      <p className="text-gray-300 mb-4 text-sm">
+                        {project.description}
+                      </p>
+
+                      {/* Technology tags */}
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {project.technologies && project.technologies.map((tech, i) => (
+                          <span 
+                            key={i} 
+                            className="text-xs bg-white/10 px-2 py-1 rounded-full"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+
+                      <div className="flex gap-3">
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-block bg-hover-bg px-4 py-2 rounded-lg text-sm hover:bg-opacity-80 transition-colors"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          View on GitHub
+                        </a>
+
+                        {project.demoLink && (
+                          <a
+                            href={project.demoLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-block bg-blue-500/30 px-4 py-2 rounded-lg text-sm hover:bg-opacity-50 transition-colors"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            Live Demo
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Visual indicator for swipe direction on mobile */}
+            {isDragging && (
               <div 
-                className="text-white text-6xl" 
+                className="absolute inset-0 pointer-events-none flex items-center justify-center"
                 style={{ 
-                  transform: `translateX(${(currentX - startX) / 3}px)`,
-                  opacity: Math.min(0.8, Math.abs(currentX - startX) / 200)
+                  opacity: Math.min(1, Math.abs(currentX - startX) / 100) * 0.5 
                 }}
               >
-                {currentX - startX > 0 ? <FaChevronLeft /> : <FaChevronRight />}
+                <div 
+                  className="text-white text-6xl" 
+                  style={{ 
+                    transform: `translateX(${(currentX - startX) / 3}px)`,
+                    opacity: Math.min(0.8, Math.abs(currentX - startX) / 200)
+                  }}
+                >
+                  {currentX - startX > 0 ? <FaChevronLeft /> : <FaChevronRight />}
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
+          
+          {/* Navigation button - right side */}
+          <button 
+            onClick={nextProject}
+            className="absolute right-0 md:right-2 top-1/2 transform -translate-y-1/2 h-10 w-10 md:h-12 md:w-12 bg-dock-bg rounded-full hover:bg-hover-bg transition-colors flex items-center justify-center z-20"
+            aria-label="Next project"
+          >
+            <FaChevronRight size={18} />
+          </button>
         </div>
 
         {/* Optimized pagination indicators */}
