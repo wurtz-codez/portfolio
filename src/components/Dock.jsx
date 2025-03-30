@@ -17,17 +17,17 @@ function Dock({ onNavigate, currentSection }) {
   }, []);
 
   const dockItems = [
-    { icon: <FaHome size={isMobile ? 18 : 24} />, label: 'Home', onClick: onNavigate.home },
-    { icon: <FaUser size={isMobile ? 18 : 24} />, label: 'About', onClick: onNavigate.about },
-    { icon: <FaCode size={isMobile ? 18 : 24} />, label: 'Skills', onClick: onNavigate.skills },
-    { icon: <FaProjectDiagram size={isMobile ? 18 : 24} />, label: 'Projects', onClick: onNavigate.projects },
-    { icon: <FaFileAlt size={isMobile ? 18 : 24} />, label: 'Resume', onClick: onNavigate.resume },
-    { icon: <FaEnvelope size={isMobile ? 18 : 24} />, label: 'Contact', onClick: onNavigate.contact },
+    { icon: <FaHome size={isMobile ? 18 : 22} />, label: 'Home', onClick: onNavigate.home },
+    { icon: <FaUser size={isMobile ? 18 : 22} />, label: 'About', onClick: onNavigate.about },
+    { icon: <FaCode size={isMobile ? 18 : 22} />, label: 'Skills', onClick: onNavigate.skills },
+    { icon: <FaProjectDiagram size={isMobile ? 18 : 22} />, label: 'Projects', onClick: onNavigate.projects },
+    { icon: <FaFileAlt size={isMobile ? 18 : 22} />, label: 'Resume', onClick: onNavigate.resume },
+    { icon: <FaEnvelope size={isMobile ? 18 : 22} />, label: 'Contact', onClick: onNavigate.contact },
   ];
 
   return (
-    <div className="bg-dock-bg backdrop-blur-xl rounded-2xl px-3 sm:px-6 py-2.5 sm:py-4 border border-white/10 shadow-lg max-w-fit mx-auto">
-      <div className={`flex items-center justify-center ${isMobile ? 'gap-3.5' : 'gap-7'}`}>
+    <div className="bg-dock-bg backdrop-blur-xl rounded-2xl px-3 sm:px-5 py-2 sm:py-3 border border-white/10 shadow-lg max-w-fit mx-auto">
+      <div className={`flex items-center justify-center ${isMobile ? 'gap-3.5' : 'gap-6'}`}>
         {dockItems.map((item, index) => (
           <motion.div
             key={item.label}
@@ -36,16 +36,26 @@ function Dock({ onNavigate, currentSection }) {
             whileTap={{ scale: 0.95 }}
             onClick={item.onClick}
           >
-            <div className={`${isMobile ? 'p-2' : 'p-3'} rounded-full cursor-pointer hover:bg-white/10 transition-colors`}>
+            <div className={`${isMobile ? 'p-2' : 'p-2.5'} rounded-full cursor-pointer hover:bg-white/10 transition-colors`}>
               {item.icon}
             </div>
-            <span className="absolute -bottom-6 opacity-0 group-hover:opacity-100 text-xs transition-opacity whitespace-nowrap bg-black/70 px-2 py-1 rounded-md">
+            
+            {/* Visible label only on mobile screens */}
+            {isMobile && (
+              <span className="text-[10px] mt-1 text-white/80 font-medium">
+                {item.label}
+              </span>
+            )}
+            
+            {/* Tooltip on hover - only on desktop/laptop */}
+            <span className={`absolute -bottom-6 ${isMobile ? 'hidden' : 'opacity-0 group-hover:opacity-100'} text-xs transition-opacity whitespace-nowrap bg-black/70 px-2 py-1 rounded-md`}>
               {item.label}
             </span>
+            
             {currentSection === index + 1 && (
               <motion.div
                 layoutId="activeIndicator"
-                className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full"
+                className={`absolute ${isMobile ? '-bottom-4' : '-bottom-1'} left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full`}
                 transition={{
                   type: "spring",
                   stiffness: 500,
