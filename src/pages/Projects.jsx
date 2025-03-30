@@ -23,7 +23,7 @@ function Projects() {
     {
       title: "Bazaario",
       description: "BAZAARIO is a multi-vendor platform built with the MERN stack that allows users to create and manage multiple websites for selling products.",
-      image: "/src/assets/projects/ecommerce.jpg",
+      image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80",
       github: "https://github.com/wurtz-codez/bazaario",
       technologies: ["React.js", "Chart.js", "Node.js",  "Express.js", "MongoDB", "JWT"]
     },
@@ -31,21 +31,21 @@ function Projects() {
       title: "Escape 404",
       description: `An interactive game with a leaderboard using React, Redux, and Appwrite, boosting user
                     engagement by 30%.`,
-      image: "/src/assets/projects/portfolio.jpg",
+      image: "https://images.unsplash.com/photo-1614064641938-3bbee52942c7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80",
       github: "https://github.com/wurtz-codez/Escape-404",
       technologies: ["React.js", "Redux", "Appwrite", "TypeScript"]
     },
     {
       title: "Expenser",
       description: "This is a Full Stack web application for recording and tracking your expenses with some more different functionalities.",
-      image: "/src/assets/projects/ai-chat.jpg",
+      image: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80",
       github: "https://github.com/wurtz-codez/Expenser",
       technologies: ["React", "Node.js", "Mongo", "JWT", "Express.js"]
     },
     {
       title: "Career Convent School",
       description: `Developed a responsive frontend for a school organization using React.js, enhancing load speed by 40%.`,
-      image: "/src/assets/projects/weather.jpg",
+      image: "https://images.unsplash.com/photo-1600869009498-8d429f88d4f5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80",
       github: "https://github.com/wurtz-codez/Career-Convent-School-Rajgarh",
       demoLink: "https://ccsr.vercel.app",
       technologies: ["React.js", "Tailwind"]
@@ -283,7 +283,7 @@ function Projects() {
           {/* Navigation button - left side */}
           <button 
             onClick={prevProject}
-            className="absolute left-0 md:left-2 top-1/2 transform -translate-y-1/2 h-10 w-10 md:h-12 md:w-12 bg-dock-bg rounded-full hover:bg-hover-bg transition-colors flex items-center justify-center z-20"
+            className="absolute left-0 md:left-2 top-1/2 transform -translate-y-1/2 h-10 w-10 md:h-12 md:w-12 bg-white/10 backdrop-blur-md rounded-full hover:bg-white/20 transition-colors flex items-center justify-center z-20 border border-white/20"
             aria-label="Previous project"
           >
             <FaChevronLeft size={18} />
@@ -316,7 +316,7 @@ function Projects() {
                 return (
                   <div
                     key={index}
-                    className="absolute bg-dock-bg rounded-xl overflow-hidden backdrop-blur-lg w-[300px] sm:w-[350px] max-w-[85%] sm:max-w-full"
+                    className="absolute glass-card rounded-xl overflow-hidden w-[300px] sm:w-[350px] max-w-[85%] sm:max-w-full"
                     style={{ 
                       ...itemStyles[index],
                       transformStyle: 'preserve-3d',
@@ -324,19 +324,27 @@ function Projects() {
                       willChange: 'transform, opacity',
                       pointerEvents: isDragging ? 'none' : 'auto',
                       cursor: isDragging ? 'grabbing' : 'pointer',
+                      background: 'rgba(20, 20, 35, 0.5)',
+                      backdropFilter: 'blur(10px)',
+                      WebkitBackdropFilter: 'blur(10px)',
+                      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
                     }}
                     onClick={() => !isDragging && handleProjectClick(index)}
                   >
                     <div 
-                      className="h-36 sm:h-48 bg-gray-800 bg-cover bg-center" 
+                      className="h-40 sm:h-52 bg-cover bg-center relative overflow-hidden" 
                       style={{ 
                         backgroundImage: `url(${project.image})`,
-                        backgroundColor: '#1a1a1a'
                       }}
-                    ></div>
-                    <div className="p-4">
-                      <h3 className="text-lg font-bold mb-2">{project.title}</h3>
-                      <p className="text-gray-300 mb-4 text-sm">
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-t from-[rgba(20,20,35,0.9)] to-transparent"></div>
+                      <div className="absolute bottom-0 left-0 p-4 w-full">
+                        <h3 className="text-xl font-bold mb-1 text-white drop-shadow-lg">{project.title}</h3>
+                      </div>
+                    </div>
+                    <div className="p-5">
+                      <p className="text-gray-200 mb-4 text-sm">
                         {project.description}
                       </p>
 
@@ -345,7 +353,7 @@ function Projects() {
                         {project.technologies && project.technologies.map((tech, i) => (
                           <span 
                             key={i} 
-                            className="text-xs bg-white/10 px-2 py-1 rounded-full"
+                            className="text-xs bg-white/10 backdrop-blur-sm px-2 py-1 rounded-full border border-white/5"
                           >
                             {tech}
                           </span>
@@ -357,7 +365,7 @@ function Projects() {
                           href={project.github}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-block bg-hover-bg px-4 py-2 rounded-lg text-sm hover:bg-opacity-80 transition-colors"
+                          className="inline-block bg-[#24292F] backdrop-blur-md border border-white/10 px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#2F363D] transition-all transform hover:scale-105 shadow-lg shadow-black/30 text-center"
                           onClick={(e) => {
                             e.stopPropagation();
                           }}
@@ -370,7 +378,7 @@ function Projects() {
                             href={project.demoLink}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-block bg-blue-500/30 px-4 py-2 rounded-lg text-sm hover:bg-opacity-50 transition-colors"
+                            className="inline-block bg-white/5 backdrop-blur-md border border-white/10 px-4 py-2 rounded-lg text-sm hover:bg-white/10 transition-colors"
                             onClick={(e) => {
                               e.stopPropagation();
                             }}
@@ -409,7 +417,7 @@ function Projects() {
           {/* Navigation button - right side */}
           <button 
             onClick={nextProject}
-            className="absolute right-0 md:right-2 top-1/2 transform -translate-y-1/2 h-10 w-10 md:h-12 md:w-12 bg-dock-bg rounded-full hover:bg-hover-bg transition-colors flex items-center justify-center z-20"
+            className="absolute right-0 md:right-2 top-1/2 transform -translate-y-1/2 h-10 w-10 md:h-12 md:w-12 bg-white/10 backdrop-blur-md rounded-full hover:bg-white/20 transition-colors flex items-center justify-center z-20 border border-white/20"
             aria-label="Next project"
           >
             <FaChevronRight size={18} />
