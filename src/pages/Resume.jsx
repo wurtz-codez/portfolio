@@ -2,14 +2,11 @@ import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 
 function Resume() {
-  // Update to use PDF file instead of PNG
   const resumePdfUrl = "/KoustubhPande_Resume (1).pdf";
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [pdfLoaded, setPdfLoaded] = useState(false);
 
-  // Add a loading state for the PDF
   useEffect(() => {
-    // Check if the PDF exists and is accessible
     const checkPdf = async () => {
       try {
         const response = await fetch(resumePdfUrl);
@@ -24,20 +21,15 @@ function Resume() {
     checkPdf();
   }, [resumePdfUrl]);
 
-  // Handle resume download
   const handleDownload = () => {
-    // Create an anchor element and set properties for download
     const link = document.createElement('a');
     link.href = resumePdfUrl;
     link.download = "KoustubhPande_Resume.pdf";
-    
-    // Append to body, click programmatically, then remove
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  // Split the title into individual letters for hover effect
   const title = "Resume";
 
   return (
@@ -84,25 +76,44 @@ function Resume() {
         >
           <motion.div
             whileHover={{ scale: 1.02 }}
-            className="mb-8 overflow-hidden rounded-lg bg-white"
+            className="mb-8 overflow-hidden rounded-lg bg-white relative"
             style={{ height: "70vh" }}
           >
             {pdfLoaded ? (
-              <object
-                data={resumePdfUrl}
-                type="application/pdf"
-                width="100%"
-                height="100%"
-                className="w-full h-full"
-              >
-                <p className="p-4 text-black text-center">
-                  Your browser doesn't support PDF embedding. You can 
-                  <a href={resumePdfUrl} className="text-blue-600 underline mx-1">
-                    download the PDF
-                  </a>
-                  instead.
-                </p>
-              </object>
+              <>
+                <div className="w-full h-full relative">
+                  <object
+                    data={resumePdfUrl}
+                    type="application/pdf"
+                    width="100%"
+                    height="100%"
+                    className="w-full h-full filter blur-md"
+                  >
+                    <p className="p-4 text-black text-center">
+                      Your browser doesn't support PDF embedding. You can 
+                      <a href={resumePdfUrl} className="text-blue-600 underline mx-1">
+                        download the PDF
+                      </a>
+                      instead.
+                    </p>
+                  </object>
+                  
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 text-white p-6">
+                    <div className="bg-cyan bg-opacity-60 p-6 rounded-lg max-w-md text-center">
+                      <h3 className="text-2xl font-bold mb-2">Preview Blurred</h3>
+                      <p className="mb-4">This is a blurred preview of my resume. Please download for a clear view.</p>
+                      {/* <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="bg-hover-bg px-6 py-2 rounded-lg font-semibold hover:bg-opacity-80 transition-colors"
+                        onClick={handleDownload}
+                      >
+                        Download to View
+                      </motion.button> */}
+                    </div>
+                  </div>
+                </div>
+              </>
             ) : (
               <div className="w-full h-full flex items-center justify-center">
                 <p className="text-gray-800">Loading resume...</p>
