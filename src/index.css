@@ -195,3 +195,44 @@ html {
   0% { background-position: 0% center; }
   100% { background-position: 200% center; }
 }
+
+/* Responsive heading styles */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.75rem !important;
+  }
+  
+  h2 {
+    font-size: 1.5rem !important;
+  }
+  
+  h3 {
+    font-size: 1.25rem !important;
+  }
+  
+  h4 {
+    font-size: 1.1rem !important;
+  }
+  
+  .section-title {
+    font-size: 1.5rem !important;
+    margin-bottom: 1rem !important;
+  }
+}
+
+/* Dock responsive styles */
+@media (max-width: 768px) {
+  .dock {
+    max-width: 95%;
+    margin: 0 auto;
+    padding: 0.75rem 1rem;
+  }
+  
+  .dock-item {
+    transform: scale(0.9);
+  }
+  
+  .dock-item:hover {
+    transform: scale(1.15);
+  }
+}

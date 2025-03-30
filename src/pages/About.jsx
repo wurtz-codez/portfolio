@@ -56,41 +56,12 @@ function About() {
           </motion.h1>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Bio Section */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="backdrop-blur-xl bg-white/10 rounded-2xl p-8 border border-white/20 shadow-xl"
-          >
-            <h2 className="text-2xl font-bold mb-6">
-              Ayo, that's me<span className="inline-block w-[3ch]">{dots}</span>
-            </h2>
-            <div className="space-y-4 text-gray-300">
-              <p>
-                A passionate Full Stack Developer with a keen interest in creating
-                beautiful and functional web applications. My journey in software
-                development began with a curiosity about how things work on the
-                internet, which led me to explore various technologies and frameworks.
-              </p>
-              <p>
-                I specialize in building modern web applications using React, Node.js,
-                and various other cutting-edge technologies. I believe in writing clean,
-                maintainable code and creating intuitive user experiences.
-              </p>
-              <p>
-                When I'm not coding, you can find me exploring new technologies,
-                participating in hackathons or sharing my knowledge through
-                technical writing.
-              </p>
-            </div>
-          </motion.div>
-
-          {/* Profile Section */}
+        <div className="flex flex-col md:grid md:grid-cols-2 gap-8">
+          {/* Profile Section - Order 1 on mobile, 2 on desktop */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="backdrop-blur-xl bg-white/10 rounded-2xl p-8 border border-white/20 shadow-xl"
+            className="backdrop-blur-xl bg-white/10 rounded-2xl p-8 border border-white/20 shadow-xl order-1 md:order-2"
           >
             <div className="text-center mb-8">
               <motion.div
@@ -122,6 +93,35 @@ function About() {
                 <span className="text-purple-400">🎓</span>
                 <span>Vellore Institute of Technology</span>
               </div>
+            </div>
+          </motion.div>
+
+          {/* Bio Section - Order 2 on mobile, 1 on desktop */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="backdrop-blur-xl bg-white/10 rounded-2xl p-8 border border-white/20 shadow-xl order-2 md:order-1"
+          >
+            <h2 className="text-2xl font-bold mb-6">
+              Ayo, that's me<span className="inline-block w-[3ch]">{dots}</span>
+            </h2>
+            <div className="space-y-4 text-gray-300">
+              <p>
+                A passionate Full Stack Developer with a keen interest in creating
+                beautiful and functional web applications. My journey in software
+                development began with a curiosity about how things work on the
+                internet, which led me to explore various technologies and frameworks.
+              </p>
+              <p>
+                I specialize in building modern web applications using React, Node.js,
+                and various other cutting-edge technologies. I believe in writing clean,
+                maintainable code and creating intuitive user experiences.
+              </p>
+              <p>
+                When I'm not coding, you can find me exploring new technologies,
+                participating in hackathons or sharing my knowledge through
+                technical writing.
+              </p>
             </div>
           </motion.div>
         </div>
