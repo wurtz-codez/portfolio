@@ -41,7 +41,7 @@ function Skills() {
     // Backend
     { icon: <FaNodeJs size={40} color="#339933" />, name: 'Node.js', category: 'backend' },
     // { icon: <FaPython size={40} color="#3776AB" />, name: 'Python', category: 'backend' },
-    { icon: <FaJava size={40} color="#007396" />, name: 'Java', category: 'backend' },
+    // { icon: <FaJava size={40} color="#007396" />, name: 'Java', category: 'backend' },
     
     // Database
     { icon: <SiMongodb size={40} color="#47A248" />, name: 'MongoDB', category: 'database' },
@@ -139,7 +139,7 @@ function Skills() {
         </div>
 
         {/* Scrolling Icons */}
-        <div className="mt-16 overflow-hidden">
+        {/* <div className="mt-16 overflow-hidden">
           <motion.div
             className="flex space-x-8"
             animate={{
@@ -165,7 +165,8 @@ function Skills() {
               </div>
             ))}
           </motion.div>
-        </div>
+        </div> */}
+        
       </div>
     </motion.div>
   );

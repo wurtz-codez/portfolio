@@ -136,48 +136,36 @@ function Projects() {
     return false;
   }, [nextProject, prevProject]);
 
-  // Set up event listeners for wheel, touch, and mouse events
+  // Handle touch/mouse events - simplified approach
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    // Trackpad/mouse wheel events
+    // Trackpad/mouse wheel events only
     const wheelHandler = (e) => {
       // Only prevent default if our handler actually used the scroll event
-      // This allows normal page scrolling when the user is just scrolling the page
       if (handleWheel(e)) {
         e.preventDefault();
       }
     };
 
-    // Touch events
+    // Touch events only (not interfering with mouse clicks)
     const touchStartHandler = (e) => handleDragStart(e.touches[0].clientX);
     const touchMoveHandler = (e) => handleDragMove(e.touches[0].clientX);
     const touchEndHandler = () => handleDragEnd();
 
-    // Mouse events
-    const mouseDownHandler = (e) => handleDragStart(e.clientX);
-    const mouseMoveHandler = (e) => handleDragMove(e.clientX);
-    const mouseUpHandler = () => handleDragEnd();
-
-    // Add event listeners
+    // Add event listeners - removing mouse drag events
     container.addEventListener('wheel', wheelHandler, { passive: false });
     container.addEventListener('touchstart', touchStartHandler);
     container.addEventListener('touchmove', touchMoveHandler);
     container.addEventListener('touchend', touchEndHandler);
-    container.addEventListener('mousedown', mouseDownHandler);
-    window.addEventListener('mousemove', mouseMoveHandler);
-    window.addEventListener('mouseup', mouseUpHandler);
-
+    
     // Clean up
     return () => {
       container.removeEventListener('wheel', wheelHandler);
       container.removeEventListener('touchstart', touchStartHandler);
       container.removeEventListener('touchmove', touchMoveHandler);
       container.removeEventListener('touchend', touchEndHandler);
-      container.removeEventListener('mousedown', mouseDownHandler);
-      window.removeEventListener('mousemove', mouseMoveHandler);
-      window.removeEventListener('mouseup', mouseUpHandler);
     };
   }, [handleDragStart, handleDragMove, handleDragEnd, handleWheel]);
 
@@ -370,7 +358,9 @@ function Projects() {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-block bg-hover-bg px-4 py-2 rounded-lg text-sm hover:bg-opacity-80 transition-colors"
-                          onClick={(e) => e.stopPropagation()}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
                         >
                           View on GitHub
                         </a>
@@ -381,7 +371,9 @@ function Projects() {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-block bg-blue-500/30 px-4 py-2 rounded-lg text-sm hover:bg-opacity-50 transition-colors"
-                            onClick={(e) => e.stopPropagation()}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                            }}
                           >
                             Live Demo
                           </a>
