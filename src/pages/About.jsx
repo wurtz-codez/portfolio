@@ -83,7 +83,7 @@ function About() {
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
                 <span className="text-blue-400">📍</span>
-                <span>Indore (M.P.), India</span>
+                <span>Bhopal (M.P.), India</span>
               </div>
               <div className="flex items-center space-x-3">
                 <span className="text-green-400">💼</span>

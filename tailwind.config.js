@@ -5,6 +5,10 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        montserrat: ['Montserrat', 'sans-serif'],
+        lato: ['Lato', 'sans-serif'],
+      },
       colors: {
         'dock-bg': 'rgba(28, 28, 28, 0.7)',
         'hover-bg': 'rgba(255, 255, 255, 0.1)',
