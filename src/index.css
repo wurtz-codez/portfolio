@@ -66,6 +66,91 @@ html {
   transform: scale(1.2);
 }
 
+/* Dock animation styles */
+@keyframes drawCircle {
+  0% {
+    stroke-dashoffset: 283; /* Circumference of a circle with radius 45px (2*π*r) */
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes rotateCircle {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.circle-border {
+  stroke-dasharray: 283; /* Circumference of a circle with radius 45px */
+  stroke-linecap: round;
+}
+
+/* Updated Dock animation styles with FASTER animation (1.5 second total) */
+@keyframes borderProgress {
+  0% {
+    stroke-dashoffset: 189; /* 2*π*30px (circumference of circle) */
+    stroke-dasharray: 189;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    stroke-dasharray: 189;
+  }
+}
+
+@keyframes popEffect {
+  0% { transform: scale(0.8); animation-timing-function: ease-out; }
+  40% { transform: scale(1.1); animation-timing-function: ease-in-out; }
+  100% { transform: scale(1); }
+}
+
+/* Dock expansion animation - FASTER for 1.5 second total */
+.dock-expansion-enter {
+  width: 60px;
+  border-radius: 30px;
+}
+
+.dock-expansion-active {
+  transition: width 0.7s ease-out; /* Reduced from 1s to 0.7s */
+}
+
+.dock-expansion-exit {
+  transition: width 0.7s ease-in; /* Reduced from 1s to 0.7s */
+}
+
+/* Ensure Dock has higher z-index than page content but lower than any modals */
+.dock-container {
+  z-index: 50;
+  transform-origin: center bottom; 
+}
+
+/* Apple-inspired dock design tweaks */
+.dock-item-active {
+  position: relative;
+}
+
+.dock-item-active::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: #3b82f6;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.8);
+}
+
+/* Set minimum height to ensure scrolling is possible to trigger animations */
+.min-scroll-height {
+  min-height: 120vh;
+}
+
 /* Glassmorphism styles */
 .glass {
   background: rgba(255, 255, 255, 0.05);
@@ -282,6 +367,39 @@ html {
   
   .dock-item:hover {
     transform: scale(1.15);
+  }
+  
+  .dock-item-active::after {
+    bottom: -4px;
+    width: 3px;
+    height: 3px;
+  }
+}
+
+/* Enhanced mobile responsiveness for very small screens */
+@media (max-width: 380px) {
+  .dock {
+    max-width: 98%;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .dock-item {
+    transform: scale(0.85);
+  }
+  
+  .dock-item:hover {
+    transform: scale(1.05);
+  }
+  
+  .dock-item-active::after {
+    bottom: -3px;
+    width: 2px;
+    height: 2px;
+  }
+  
+  /* Adjust bottom spacing to keep dock visible */
+  .fixed.bottom-8 {
+    bottom: 1.5rem; /* Reduce the bottom margin on small screens */
   }
 }
 
