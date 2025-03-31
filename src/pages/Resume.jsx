@@ -72,7 +72,7 @@ function Resume() {
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.5 }}
-          className="bg-dock-bg p-8 rounded-xl backdrop-blur-lg"
+          className="bg-dock-bg/50 p-8 rounded-xl backdrop-blur-md border border-white/20 shadow-xl"
         >
           <motion.div
             whileHover={{ scale: 1.02 }}
@@ -102,14 +102,6 @@ function Resume() {
                     <div className="bg-cyan bg-opacity-60 p-6 rounded-lg max-w-md text-center">
                       <h3 className="text-2xl font-bold mb-2">Preview Blurred</h3>
                       <p className="mb-4">This is a blurred preview of my resume. Please download for a clear view.</p>
-                      {/* <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="bg-hover-bg px-6 py-2 rounded-lg font-semibold hover:bg-opacity-80 transition-colors"
-                        onClick={handleDownload}
-                      >
-                        Download to View
-                      </motion.button> */}
                     </div>
                   </div>
                 </div>
@@ -122,9 +114,9 @@ function Resume() {
           </motion.div>
           <div className="text-center">
             <motion.button
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.05, backgroundColor: "#0284c7" }}
               whileTap={{ scale: 0.95 }}
-              className="bg-hover-bg px-8 py-4 rounded-lg text-lg font-semibold hover:bg-opacity-80 transition-colors shadow-lg"
+              className="bg-slate-900 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors shadow-lg border border-slate-700"
               onClick={handleDownload}
             >
               Download Resume
