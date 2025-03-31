@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { FaReact, FaNodeJs, FaPython, FaJava, FaHtml5, FaCss3Alt, FaJs, FaGitAlt, FaDocker, FaAws, FaGithub, FaFigma } from 'react-icons/fa';
 import { SiTailwindcss, SiMongodb, SiPostgresql, SiRedux, SiNextdotjs, SiTypescript, SiFirebase, SiJest, SiWebpack, SiCplusplus, SiPostman, SiJupyter, SiFramer } from 'react-icons/si';
@@ -6,10 +6,109 @@ import { VscCode } from 'react-icons/vsc';
 
 function Skills() {
   const [activeCategory, setActiveCategory] = useState('all');
-  
-  // Split the title into individual letters for hover effect
-  const title = "Skills";
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [columns, setColumns] = useState(5); // Default to 5 columns
+  
+  // Create refs for each row
+  const rowsRef = useRef([]);
+  const containerRef = useRef(null);
+  
+  // Handle GSAP import and initialization
+  useEffect(() => {
+    // Dynamically import GSAP to avoid server-side rendering issues
+    const loadGsap = async () => {
+      try {
+        const gsapModule = await import('gsap');
+        const scrollTriggerModule = await import('gsap/ScrollTrigger');
+        
+        const gsap = gsapModule.default;
+        const ScrollTrigger = scrollTriggerModule.ScrollTrigger;
+        
+        // Register ScrollTrigger plugin
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Update columns based on window width
+        const updateColumns = () => {
+          if (window.innerWidth < 640) setColumns(2);
+          else if (window.innerWidth < 768) setColumns(3);
+          else if (window.innerWidth < 1024) setColumns(4);
+          else setColumns(5);
+        };
+        
+        // Initial column setup
+        updateColumns();
+        
+        // Add resize listener
+        window.addEventListener('resize', updateColumns);
+        
+        // Clear any existing animations
+        rowsRef.current.forEach(row => {
+          if (row) {
+            gsap.killTweensOf(row);
+          }
+        });
+        
+        // Animate each row with alternating directions
+        rowsRef.current.forEach((row, index) => {
+          if (!row) return;
+          
+          const direction = index % 2 === 0 ? -1 : 1; // Alternate direction
+          
+          gsap.fromTo(
+            row.children,
+            {
+              x: direction * 50,
+              opacity: 0,
+            },
+            {
+              x: 0,
+              opacity: 1,
+              duration: 0.6,
+              stagger: 0.08,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: row,
+                start: "top center+=100", // Trigger when the top of the row reaches the center of viewport plus 100px offset
+                end: "bottom center",
+                toggleActions: "play none none reverse",
+                once: false, // Animation will play again if scrolled back into view
+                markers: false, // Set to true for debugging
+              }
+            }
+          );
+        });
+        
+        // Make the title animation trigger immediately when Skills section is in view
+        gsap.fromTo(
+          ".skills-title-container",
+          { opacity: 0, y: -30 },
+          { 
+            opacity: 1, 
+            y: 0, 
+            duration: 0.8,
+            scrollTrigger: {
+              trigger: ".skills-title-container",
+              start: "top bottom-=200", // Start earlier
+              toggleActions: "play none none none",
+              once: true
+            }
+          }
+        );
+        
+        return () => {
+          // Cleanup ScrollTrigger instances and event listeners
+          window.removeEventListener('resize', updateColumns);
+          ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+        };
+      } catch (error) {
+        console.error("Error loading GSAP:", error);
+      }
+    };
+    
+    loadGsap();
+  }, [activeCategory]); // Re-run when category changes
+  
+  const title = "Skills";
   
   const categories = [
     { id: 'all', name: 'All Skills' },
@@ -34,14 +133,10 @@ function Skills() {
     { icon: <SiRedux size={40} color="#764ABC" />, name: 'Redux', category: 'frontend' },
     { icon: <FaHtml5 size={40} color="#E34F26" />, name: 'HTML5', category: 'frontend' },
     { icon: <FaCss3Alt size={40} color="#1572B6" />, name: 'CSS3', category: 'frontend' },
-    // { icon: <FaJs size={40} color="#F7DF1E" />, name: 'JavaScript', category: 'frontend' },
-    // { icon: <SiTypescript size={40} color="#3178C6" />, name: 'TypeScript', category: 'frontend' },
     { icon: <SiTailwindcss size={40} color="#06B6D4" />, name: 'Tailwind CSS', category: 'frontend' },
     
     // Backend
     { icon: <FaNodeJs size={40} color="#339933" />, name: 'Node.js', category: 'backend' },
-    // { icon: <FaPython size={40} color="#3776AB" />, name: 'Python', category: 'backend' },
-    // { icon: <FaJava size={40} color="#007396" />, name: 'Java', category: 'backend' },
     
     // Database
     { icon: <SiMongodb size={40} color="#47A248" />, name: 'MongoDB', category: 'database' },
@@ -62,18 +157,52 @@ function Skills() {
   const filteredSkills = activeCategory === 'all' 
     ? skillsData 
     : skillsData.filter(skill => skill.category === activeCategory);
+    
+  // Group skills into rows based on columns state
+  const skillRows = [];
+  for (let i = 0; i < filteredSkills.length; i += columns) {
+    skillRows.push(filteredSkills.slice(i, i + columns));
+  }
+
+  // Hover animation variants for individual skill cards - Reduced intensity
+  const cardVariants = {
+    hover: {
+      scale: 1.05, // Reduced from 1.1 to 1.05
+      rotate: [0, -1, 1, -1, 0], // Reduced rotation angles from [-2, 2] to [-1, 1]
+      boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.2)", // Reduced shadow size and opacity
+      borderColor: "rgba(255, 255, 255, 0.25)",
+      transition: {
+        scale: { duration: 0.25, ease: "easeOut" }, // Faster transition
+        rotate: { duration: 0.2, ease: "easeInOut" }, // Faster rotation
+      }
+    }
+  };
+
+  // Icon animation variants - Reduced intensity
+  const iconVariants = {
+    hover: {
+      scale: 1.1, // Reduced from 1.2 to 1.1
+      rotate: 3, // Reduced from 5 to 3 degrees
+      y: -3, // Reduced from -5 to -3
+      transition: { 
+        type: "spring", 
+        stiffness: 250, // Reduced stiffness for gentler animation
+        damping: 10 // Added damping to reduce oscillation
+      }
+    }
+  };
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="min-h-screen p-8"
+      ref={containerRef}
     >
       <div className="max-w-6xl mx-auto">
-        <div className="relative mb-12 flex justify-center">
+        {/* Added a class for the title container */}
+        <div className="relative mb-12 flex justify-center skills-title-container"> 
           <motion.h1
-            initial={{ y: -50 }}
-            animate={{ y: 0 }}
             className="text-5xl font-bold text-center py-3 px-10 relative z-10 cursor-pointer"
           >
             {title.split('').map((letter, index) => (
@@ -98,8 +227,8 @@ function Skills() {
           </motion.h1>
         </div>
 
-        {/* Category Filter */}
-        <div className="flex flex-wrap justify-center gap-3 mb-10">
+        {/* Category Filter - Add a class for this section */}
+        <div className="flex flex-wrap justify-center gap-3 mb-10 skills-categories">
           {categories.map(category => (
             <motion.button
               key={category.id}
@@ -117,56 +246,30 @@ function Skills() {
           ))}
         </div>
 
-        {/* Skills Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-          {filteredSkills.map((skill, index) => (
-            <motion.div
-              key={skill.name}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="backdrop-blur-xl bg-white/10 rounded-2xl p-6 border border-white/20 shadow-xl flex flex-col items-center justify-center"
+        {/* Skills Grid - We're already accessing these rows via ref */}
+        <div className="space-y-8"> {/* Increased spacing between rows for better visual separation */}
+          {skillRows.map((row, rowIndex) => (
+            <div 
+              key={rowIndex} 
+              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"
+              ref={el => rowsRef.current[rowIndex] = el}
             >
-              <motion.div
-                whileHover={{ scale: 1.2, rotate: 5 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                {skill.icon}
-              </motion.div>
-              <span className="mt-3 text-center">{skill.name}</span>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Scrolling Icons */}
-        {/* <div className="mt-16 overflow-hidden">
-          <motion.div
-            className="flex space-x-8"
-            animate={{
-              x: [0, -2000],
-            }}
-            transition={{
-              repeat: Infinity,
-              duration: 30,
-              ease: "linear"
-            }}
-          >
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="flex space-x-16 mx-8">
-                {skillsData.map((skill, index) => (
-                  <motion.div
-                    key={`${index}-${i}`}
-                    className="text-4xl opacity-60"
-                    whileHover={{ opacity: 1, scale: 1.2 }}
-                  >
+              {row.map((skill, index) => (
+                <motion.div
+                  key={`${skill.name}-${index}`}
+                  variants={cardVariants}
+                  whileHover="hover"
+                  className="backdrop-blur-xl bg-white/10 rounded-2xl p-6 border border-white/20 shadow-xl flex flex-col items-center justify-center overflow-hidden"
+                >
+                  <motion.div variants={iconVariants}>
                     {skill.icon}
                   </motion.div>
-                ))}
-              </div>
-            ))}
-          </motion.div>
-        </div> */}
-        
+                  <span className="mt-3 text-center font-medium">{skill.name}</span>
+                </motion.div>
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
     </motion.div>
   );
