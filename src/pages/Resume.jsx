@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 
 function Resume() {
-  const resumePdfUrl = "/KoustubhPande_Resume (1).pdf";
+  const resumePdfUrl = "/Koustubh_Pande_Resume.pdf";
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [pdfLoaded, setPdfLoaded] = useState(false);
 
