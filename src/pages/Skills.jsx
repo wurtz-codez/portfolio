@@ -59,20 +59,22 @@ function Skills() {
             {
               x: direction * 50,
               opacity: 0,
+              rotateY: direction * 45, // Add a 3D rotation effect
             },
             {
               x: 0,
               opacity: 1,
-              duration: 0.6,
-              stagger: 0.08,
-              ease: "power2.out",
+              rotateY: 0,
+              duration: 0.8,
+              stagger: 0.1,
+              ease: "power3.out",
               scrollTrigger: {
                 trigger: row,
-                start: "top center+=100", // Trigger when the top of the row reaches the center of viewport plus 100px offset
+                start: "top bottom",
                 end: "bottom center",
                 toggleActions: "play none none reverse",
-                once: false, // Animation will play again if scrolled back into view
-                markers: false, // Set to true for debugging
+                once: false,
+                markers: false,
               }
             }
           );
@@ -81,20 +83,35 @@ function Skills() {
         // Make the title animation trigger immediately when Skills section is in view
         gsap.fromTo(
           ".skills-title-container",
-          { opacity: 0, y: -30 },
+          { opacity: 0, y: -50, scale: 0.8, rotateX: -30 }, // Add scale and 3D rotation
           { 
             opacity: 1, 
             y: 0, 
-            duration: 0.8,
+            scale: 1,
+            rotateX: 0,
+            duration: 1,
+            ease: "elastic.out(1, 0.5)", // Elastic easing for a bouncy effect
             scrollTrigger: {
               trigger: ".skills-title-container",
-              start: "top bottom-=200", // Start earlier
+              start: "top bottom",
               toggleActions: "play none none none",
               once: true
             }
           }
         );
-        
+
+        // Add a subtle floating animation to skill cards
+        rowsRef.current.forEach(row => {
+          if (!row) return;
+          gsap.to(row.children, {
+            y: "+=10",
+            repeat: -1,
+            yoyo: true,
+            duration: 2,
+            ease: "sine.inOut",
+          });
+        });
+
         return () => {
           // Cleanup ScrollTrigger instances and event listeners
           window.removeEventListener('resize', updateColumns);
