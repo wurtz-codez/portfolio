@@ -16,8 +16,8 @@ const Footer = () => {
           © {new Date().getFullYear()} Koustubh Pande. All rights reserved.
         </p>
         <p className="text-xs mb-4 flex items-center justify-center">
-          Made with <FaHeart className="text-red-500 mx-1" size={12} /> and
-          <span className="text-white-400 mx-1">by Koustubh.</span>
+          Made with <FaHeart className="text-red-500 mx-1" size={12} />
+          by Koustubh. 
         </p>
         <p className="text-xs text-gray-500">
           Thanks for visiting my portfolio!
