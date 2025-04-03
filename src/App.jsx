@@ -8,12 +8,14 @@ import Projects from './pages/Projects';
 import Resume from './pages/Resume';
 import Contact from './pages/Contact';
 import GradientBackground from './components/GradientBackground';
+import Footer from './components/Footer';
 
 function App() {
   const [currentSection, setCurrentSection] = useState(1);
   const [showDock, setShowDock] = useState(false);
   const [showScrollPrompt, setShowScrollPrompt] = useState(true);
-  
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
+
   const sectionRefs = {
     home: useRef(null),
     about: useRef(null),
@@ -23,29 +25,43 @@ function App() {
     contact: useRef(null)
   };
 
-  // Handle scroll events with smooth dock appearance
+  const footerRef = useRef(null);
+
+  // Handle scroll events with smooth dock appearance and disappearance near footer
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
-      
-      if (scrollPosition > 100) {
+      const viewportHeight = window.innerHeight;
+      const footerElement = footerRef.current;
+
+      // Check if footer is in viewport
+      if (footerElement) {
+        const footerRect = footerElement.getBoundingClientRect();
+        const isFooterInView = footerRect.top < viewportHeight * 0.9;
+
+        setIsFooterVisible(isFooterInView);
+      }
+
+      if (scrollPosition > 100 && !isFooterVisible) {
         setShowDock(true);
         setShowScrollPrompt(false);
       } else {
         setShowDock(false);
-        setShowScrollPrompt(true);
+        setShowScrollPrompt(scrollPosition <= 100);
       }
     };
 
     window.addEventListener('scroll', handleScroll);
+    // Initial check
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isFooterVisible]);
 
   // Update current section based on scroll position
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY + window.innerHeight / 3;
-      
+
       // Get all section elements
       const sections = [
         sectionRefs.home.current,
@@ -55,15 +71,15 @@ function App() {
         sectionRefs.resume.current,
         sectionRefs.contact.current
       ];
-      
+
       // Filter out null refs
       const validSections = sections.filter(section => section);
-      
+
       // Determine which section is currently in view
       validSections.forEach((section, index) => {
         const sectionTop = section.offsetTop;
         const sectionHeight = section.offsetHeight;
-        
+
         if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
           setCurrentSection(index + 1);
         }
@@ -91,10 +107,10 @@ function App() {
   };
 
   return (
-    <div className="relative min-h-screen text-white">
+    <div className="relative flex flex-col min-h-screen text-white">
       <GradientBackground />
       
-      <main className="relative z-10">
+      <main className="flex-grow relative z-10">
         <section id="home" ref={sectionRefs.home}>
           <Home />
         </section>
@@ -115,13 +131,13 @@ function App() {
           <Resume />
         </section>
         
-        <section id="contact" ref={sectionRefs.contact}>
+        <section id="contact" ref={sectionRefs.contact} className="mb-32">
           <Contact />
         </section>
       </main>
 
       <AnimatePresence>
-        {showDock && (
+        {showDock && !isFooterVisible && (
           <motion.div
             initial={{ 
               scaleX: 0.3, 
@@ -172,6 +188,11 @@ function App() {
           </div>
         </motion.div>
       )}
+
+      {/* Footer with ref for visibility detection */}
+      <div className="relative z-10 mt-0" ref={footerRef}>
+        <Footer />
+      </div>
     </div>
   );
 }
