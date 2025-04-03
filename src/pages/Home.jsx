@@ -69,8 +69,8 @@ function Home() {
     >
       {quote && (
         <div
-          className="relative self-center mb-12 mt-2"
-          style={{ width: "600px", height: "150px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "normal" }} // Prevent overflow
+          className="relative self-center mb-10 mt-2"
+          style={{ width: "500px", height: "120px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "normal" }} // Reduced width and height
         >
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
@@ -78,7 +78,7 @@ function Home() {
             transition={{ duration: 0.8 }}
             whileHover={{ scale: 1.05, boxShadow: "0 10px 25px rgba(0, 0, 0, 0.2)" }}
             onClick={handleQuoteClick}
-            className="p-4 rounded-2xl shadow-lg cursor-pointer transition-all duration-300 border border-theme-glass relative z-10 bg-glass backdrop-blur-md h-full flex flex-col justify-center"
+            className="p-3 rounded-2xl shadow-lg cursor-pointer transition-all duration-300 border border-theme-glass relative z-10 bg-glass backdrop-blur-md h-full flex flex-col justify-center"
           >
             <motion.p 
               className="italic text-gray-300 mb-1"
@@ -86,7 +86,7 @@ function Home() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
-              style={{ fontSize: "calc(0.9rem + 0.4vw)", lineHeight: "1.2", wordWrap: "break-word" }} // Adjusted font size and line height
+              style={{ fontSize: "calc(0.8rem + 0.3vw)", lineHeight: "1.2", wordWrap: "break-word" }} // Reduced font size
             >
               "{quote.text}"
             </motion.p>
@@ -95,13 +95,13 @@ function Home() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              style={{ fontSize: "calc(0.7rem + 0.3vw)", lineHeight: "1.2", wordWrap: "break-word" }} // Adjusted font size and line height
+              style={{ fontSize: "calc(0.65rem + 0.25vw)", lineHeight: "1.2", wordWrap: "break-word" }} // Reduced font size
             >
               — {quote.author}
             </motion.p>
             <p 
               className="text-xs text-gray-500 mt-1 text-center"
-              style={{ fontSize: "calc(0.6rem + 0.2vw)", lineHeight: "1.2", wordWrap: "break-word" }} // Adjusted font size and line height
+              style={{ fontSize: "calc(0.55rem + 0.15vw)", lineHeight: "1.2", wordWrap: "break-word" }} // Reduced font size
             >
               Click to see another quote
             </p>
