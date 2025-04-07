@@ -24,7 +24,7 @@ function Resume() {
   const handleDownload = () => {
     const link = document.createElement('a');
     link.href = resumePdfUrl;
-    link.download = "KoustubhPande_Resume.pdf";
+    link.download = "Koustubh_Pande_Resume.pdf";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
