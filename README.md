@@ -27,7 +27,7 @@ Before you begin, ensure you have the following installed:
 - Node.js (v14 or higher)
 - npm (v6 or higher)
 
-## Getting Started
+## Development Setup
 
 1. Clone the repository:
 ```bash
@@ -45,7 +45,7 @@ npm install
 npm run dev
 ```
 
-4. Open your browser and navigate to `http://localhost:5173`
+4. Open http://localhost:5173 in your browser
 
 ## Project Structure
 
