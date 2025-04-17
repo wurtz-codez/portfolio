@@ -3,10 +3,7 @@ export default {
     'tailwindcss': {},
     'autoprefixer': {},
     'postcss-preset-env': {
-      stage: 3,
-      features: {
-        'nesting-rules': true,
-      },
-    },
-  },
+      stage: 1
+    }
+  }
 }
