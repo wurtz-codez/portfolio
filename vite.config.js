@@ -20,4 +20,7 @@ export default defineConfig({
       },
     },
   },
+  optimizeDeps: {
+    include: ['@tsparticles/react', '@tsparticles/slim']
+  }
 })

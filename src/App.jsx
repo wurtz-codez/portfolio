@@ -7,7 +7,6 @@ import Skills from './pages/Skills';
 import Projects from './pages/Projects';
 import Resume from './pages/Resume';
 import Contact from './pages/Contact';
-import GradientBackground from './components/GradientBackground';
 import Footer from './components/Footer';
 
 function App() {
@@ -97,102 +96,53 @@ function App() {
     }
   };
 
-  const navigation = {
-    home: () => scrollToSection('home'),
-    about: () => scrollToSection('about'),
-    skills: () => scrollToSection('skills'),
-    projects: () => scrollToSection('projects'),
-    resume: () => scrollToSection('resume'),
-    contact: () => scrollToSection('contact'),
-  };
-
   return (
-    <div className="relative flex flex-col min-h-screen text-white">
-      <GradientBackground />
-      
-      <main className="flex-grow relative z-10">
-        <section id="home" ref={sectionRefs.home}>
-          <Home />
-        </section>
-        
-        <section id="about" ref={sectionRefs.about}>
-          <About />
-        </section>
-        
-        <section id="skills" ref={sectionRefs.skills}>
-          <Skills />
-        </section>
-        
-        <section id="projects" ref={sectionRefs.projects}>
-          <Projects />
-        </section>
-        
-        <section id="resume" ref={sectionRefs.resume}>
-          <Resume />
-        </section>
-        
-        <section id="contact" ref={sectionRefs.contact} className="mb-32">
-          <Contact />
-        </section>
-      </main>
+    <div className="relative min-h-screen bg-black">
+      {/* Main content */}
+      <div className="relative z-0">
+        <Home ref={sectionRefs.home} />
+        <About ref={sectionRefs.about} />
+        <Skills ref={sectionRefs.skills} />
+        <Projects ref={sectionRefs.projects} />
+        <Resume ref={sectionRefs.resume} />
+        <Contact ref={sectionRefs.contact} />
+        <Footer ref={footerRef} />
+      </div>
 
+      {/* Dock - positioned above everything */}
+      <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50">
+        <AnimatePresence>
+          {showDock && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Dock
+                currentSection={currentSection}
+                onNavigate={scrollToSection}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Scroll prompt */}
       <AnimatePresence>
-        {showDock && !isFooterVisible && (
+        {showScrollPrompt && (
           <motion.div
-            initial={{ 
-              scaleX: 0.3, 
-              scaleY: 0.8,
-              opacity: 0 
-            }}
-            animate={{ 
-              scaleX: 1, 
-              scaleY: 1,
-              opacity: 1 
-            }}
-            exit={{ 
-              scaleX: 0.3, 
-              scaleY: 0.8,
-              opacity: 0 
-            }}
-            transition={{ 
-              type: "spring",
-              stiffness: 180, 
-              damping: 20,    
-              mass: 1.2,      
-              duration: 0.8   
-            }}
-            className="fixed bottom-5 left-0 right-0 z-50 flex justify-center items-center"
-            style={{ 
-              transformOrigin: "center center"
-            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50"
           >
-            <Dock onNavigate={navigation} currentSection={currentSection} />
+            <div className="text-white text-sm animate-bounce">
+              Scroll to explore
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-      
-      {showScrollPrompt && (
-        <motion.div 
-          className="fixed bottom-8 left-0 right-0 mx-auto w-max text-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1, y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          <div className="text-white/50 text-sm">Scroll to explore</div>
-          <div className="w-6 h-10 border-2 border-white/30 rounded-full mx-auto mt-2 flex justify-center">
-            <motion.div 
-              className="w-1.5 h-1.5 bg-white/60 rounded-full mt-2"
-              animate={{ y: [0, 15, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-            />
-          </div>
-        </motion.div>
-      )}
-
-      {/* Footer with ref for visibility detection */}
-      <div className="relative z-10 mt-0" ref={footerRef}>
-        <Footer />
-      </div>
     </div>
   );
 }
