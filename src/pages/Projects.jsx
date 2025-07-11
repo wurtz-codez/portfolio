@@ -21,6 +21,14 @@ function Projects() {
   // Memoize the projects data to prevent unnecessary re-renders
   const projects = useMemo(() => [
     {
+      title: "Jewelry by Luna",
+      description: "A complete end-to-end E-Commerce website built with the MERN stack, featuring product catalog, shopping cart, user authentication, payment processing, and admin dashboard for managing inventory and orders.",
+      image: "/jewelrybyluna.png",
+      github: "https://github.com/wurtz-codez/jewelry-by-luna",
+      demoLink: "https://www.jewelrybyluna.in/",
+      technologies: ["React.js", "Node.js", "Express.js", "MongoDB", "JWT", "GSAP"]
+    },
+    {
       title: "Bazaario",
       description: "BAZAARIO is a multi-vendor platform built with the MERN stack that allows users to create and manage multiple websites for selling products.",
       image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80",
